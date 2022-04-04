@@ -1,0 +1,57 @@
+service: magneto-brain-mutants-store
+frameworkVersion: ">=1.28.0 <2.0.0"
+
+plugins:
+  - serverless-deployment-bucket
+
+custom:
+  active: ${file(../../../conf.${self:provider.stage}.yml):conf}
+  serviceName: mutants-store
+
+provider:
+  name: aws
+  endpointType: REGIONAL
+  runtime: go1.x
+  stage: ${opt:stage, 'dev'}
+  region: ${self:custom.active.region}
+  memorySize: 128
+  deploymentBucket:
+    name: ${self:custom.active.deployment_bucket}
+    serverSideEncryption: AES256
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:GetQueueUrl
+        - sqs:ReadMessage
+      Resource:
+        - arn:aws:sqs:${self:provider.region}:${self:custom.active.account}:${self:custom.active.queue_analysis}
+    - Effect: Allow
+      Action:
+        - dynamodb:ExecuteStatement
+        - dynamodb:PartiQLSelect
+        - dynamodb:PutItem
+      Resource:
+        - arn:aws:dynamodb:${self:provider.region}:${self:custom.active.account}:table/${self:custom.active.table_analysis}
+        - arn:aws:dynamodb:${self:provider.region}:${self:custom.active.account}:table/${self:custom.active.table_stats}
+
+
+resources:
+  Resources:
+    V1LogGroup:
+      Properties:
+        RetentionInDays: ${self:custom.active.log_retention}
+
+package:
+  individually: true
+  exclude:
+    - ./**
+
+functions:
+  v1:
+    handler: bin/v1
+    package:
+      include:
+        - ./bin/v1
+    events:
+      - sqs:
+          arn: arn:aws:sqs:${self:provider.region}:${self:custom.active.account}:${self:custom.active.queue_analysis}

@@ -1,0 +1,16 @@
+{
+  "name": "magneto-brain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "serverless": "^1.83.3",
+    "serverless-deployment-bucket": "^1.5.2",
+    "serverless-domain-manager": "^3.3.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

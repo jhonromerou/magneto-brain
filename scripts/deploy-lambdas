@@ -1,0 +1,17 @@
+#bin/bash
+path=$1
+stage=$2
+path_name=$(printf "%s" ${path} | sed 's/\//-/g')
+log_file_path="logs/aws-deployer-${path_name}.log"
+
+mkdir -p logs
+rm -f logs/${log_file_path}
+
+title="Deployment: ${path}/..."
+
+echo  "${title}\nView logs in: ${log_file_path}"
+echo "${title}" > ${log_file_path}
+
+make -C ${path} ${stage} >> ${log_file_path}
+
+echo "\nCompleted!"

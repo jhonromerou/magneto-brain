@@ -1,0 +1,21 @@
+conf:
+  region: us-east-1
+  account: 035653157618
+
+  app_version: 0
+  log_retention: 30
+
+  deployment_bucket: magneto-brain
+
+  # tables
+  table_analysis: analysis
+  table_stats: stats
+
+  # queues
+  queue_analysis: magneto_brain_validator
+
+customDomain:
+  domainName: devs.magneto-brain.xmen.com
+  basePath: ${self:custom.serviceName}
+  stage: ${self:provider.stage}
+  createRoute53Record: true

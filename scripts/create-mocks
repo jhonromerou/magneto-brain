@@ -1,0 +1,15 @@
+#! /bin/bash
+
+project_name="magneto-brain"
+container_name="vektra/mockery:v2.9.4"
+
+
+# Generate domain Mocks
+rm -rf src/domain/mocks
+mkdir -p src/domain/mocks
+docker run -v $(pwd):/${project_name} -w /${project_name}/src/domain ${container_name} --all --case underscore --output mocks
+sudo chown -R $USER:$USER ./src/domain/mocks
+
+
+docker run -v $(pwd):/${project_name} -w /${project_name}/src/infrastructure ${container_name} --all --case underscore --inpackage
+sudo chown -R $USER:$USER ./src/infrastructure

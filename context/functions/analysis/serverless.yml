@@ -1,0 +1,51 @@
+service: magneto-brain-mutants-validator
+frameworkVersion: ">=1.28.0 <2.0.0"
+
+plugins:
+  - serverless-deployment-bucket
+
+custom:
+  active: ${file(../../../conf.${self:provider.stage}.yml):conf}
+  #customDomain: ${file(../../conf.${self:provider.stage}.yml):customDomain}
+  serviceName: mutants-validator
+
+provider:
+  name: aws
+  endpointType: REGIONAL
+  runtime: go1.x
+  stage: ${opt:stage, 'dev'}
+  region: ${self:custom.active.region}
+  memorySize: 128
+  deploymentBucket:
+    name: ${self:custom.active.deployment_bucket}
+    serverSideEncryption: AES256
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:GetQueueUrl
+        - sqs:SendMessage
+      Resource:
+        - arn:aws:sqs:${self:provider.region}:${self:custom.active.account}:${self:custom.active.queue_analysis}
+
+
+resources:
+  Resources:
+    V1LogGroup:
+      Properties:
+        RetentionInDays: ${self:custom.active.log_retention}
+
+package:
+  individually: true
+  exclude:
+    - ./**
+
+functions:
+  v1:
+    handler: bin/v1
+    package:
+      include:
+        - ./bin/v1
+    events:
+      - http:
+          path: v1/mutant
+          method: post

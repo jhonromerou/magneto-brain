@@ -4,9 +4,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/jhonromerou/magneto-brain/src/domain"
 	"github.com/jhonromerou/magneto-brain/src/infrastructure/awscommon"
+
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
 func Test_Aws_Dynamodb_Provider_DynamodbConfigProvider(t *testing.T) {

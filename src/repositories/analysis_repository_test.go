@@ -4,9 +4,10 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/jhonromerou/magneto-brain/src/domain"
 	"github.com/jhonromerou/magneto-brain/src/domain/mocks"
+
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
 func Test_Analysis_Repository_Register(t *testing.T) {

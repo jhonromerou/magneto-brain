@@ -4,9 +4,10 @@ import (
 	"reflect"
 	"testing"
 
-	sqs "github.com/aws/aws-sdk-go-v2/service/sqs"
 	"github.com/jhonromerou/magneto-brain/src/domain"
 	"github.com/jhonromerou/magneto-brain/src/infrastructure/awscommon"
+
+	"github.com/aws/aws-sdk-go-v2/service/sqs"
 )
 
 func Test_Aws_Dynamodb_Provider_SqsConfigProvider(t *testing.T) {
